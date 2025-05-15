@@ -46,6 +46,12 @@ export class RegistersComponent implements OnInit {
         icon: 'fa'
       },
       {
+        title: 'OTZ Register',
+        description: '',
+        url: 'otz-register',
+        icon: 'fa'
+      },
+      {
         title: 'MOH-406: PNC Register',
         description: '',
         url: 'pnc-register',
