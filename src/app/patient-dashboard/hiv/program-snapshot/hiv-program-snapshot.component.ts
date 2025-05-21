@@ -78,6 +78,7 @@ export class HivProgramSnapshotComponent implements OnInit {
   public showCareStatus = true;
   public viralLoadCategory: any = '';
   public viralloadColor = ' ';
+  public projectBeyond = ' ';
   public backgroundColor: any = {
     pink: '#FFC0CB',
     yellow: '#FFFF00'
@@ -129,6 +130,7 @@ export class HivProgramSnapshotComponent implements OnInit {
   public last_pcr_date: string;
   public infant_feeding_method: string;
   public reason_cacx_not_done: string = null;
+  public eligibleForDelivery = false;
 
   constructor(
     private hivSummaryResourceService: HivSummaryResourceService,
@@ -528,6 +530,7 @@ export class HivProgramSnapshotComponent implements OnInit {
           this.moriskyScore8 = obs.value;
         }
       });
+      this.checkArtDeliveryEligibility();
       if (this.ismoriskyScore8) {
         this.getMorisky8();
       } else if (!this.ismoriskyScore8 && this.ismoriskyScore4) {
@@ -541,6 +544,22 @@ export class HivProgramSnapshotComponent implements OnInit {
         this.isMoriskyScorePoorOrInadequate = true;
       }
     });
+  }
+
+  private checkArtDeliveryEligibility(): void {
+    const artEligibilityConceptUuid = '907c74df-b0a1-416b-848d-87dac8bf20b9';
+    const yesConceptUuid = 'a899b35c-1350-11df-a1f1-0026b9348838';
+
+    const eligibilityObs = this.obs.find(
+      (obs) =>
+        obs &&
+        obs.concept &&
+        obs.concept.uuid === artEligibilityConceptUuid &&
+        obs.value &&
+        obs.value.uuid === yesConceptUuid
+    );
+
+    this.eligibleForDelivery = !!eligibilityObs;
   }
 
   public getAllEncounters(encounters) {

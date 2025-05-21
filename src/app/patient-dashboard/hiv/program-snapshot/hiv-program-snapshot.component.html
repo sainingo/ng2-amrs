@@ -57,7 +57,11 @@
           >
         </p>
       </div>
-    </div>
+      <div *ngIf="eligibleForDelivery" class="alert-div" style="display: inline-block">
+        <span class="hiv-alert" style="background-color: #840884">
+          Project Beyond
+        </span>
+      </div>
     <div class="snapshot-summary">
       <h4 class="component-title">Last Encounter</h4>
       <div class="col-md-12">
