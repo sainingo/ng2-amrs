@@ -1,0 +1,38 @@
+<busy *ngIf="loadingSummary" [message]="'Please Wait...'"></busy>
+
+<div *ngFor="let error of errors" class="alert alert-danger alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+    ×
+  </button>
+  {{ error.message }}
+</div>
+
+<div *ngIf="summaryData">
+  <ul class="list-group">
+    <li class="list-group-item" style="font-size: large">
+      Last Test Result: {{ summaryData.last_test_result }}
+    </li>
+    <li class="list-group-item" style="font-size: large">
+      Testing Date: {{ summaryData.date_tested }}
+    </li>
+    <li class="list-group-item" style="font-size: large">
+      Testing Strategy: {{ summaryData.testing_strategy }}
+    </li>
+    <li class="list-group-item" style="font-size: large">
+      Client Type: {{ summaryData.client_type }}
+    </li>
+    <li class="list-group-item" style="font-size: large">
+      Entry Point: {{ summaryData.entry_point }}
+    </li>
+    <li class="list-group-item" style="font-size: large">
+      Consent Given: {{ summaryData.consent ? 'Yes' : 'No' }}
+    </li>
+    <li class="list-group-item" style="font-size: large">
+      Provider: {{ summaryData.provider }}
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="!summaryData && !loadingSummary">
+  <p class="alert alert-danger">No HTS Summary Data Available</p>
+</div>

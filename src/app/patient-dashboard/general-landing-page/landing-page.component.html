@@ -70,6 +70,12 @@
                   [programUuid]="row.programUuid"
                 >
                 </oncology-snapshot>
+                <hts-snapshot
+                  (addBackground)="onAddBackground($event)"
+                  *ngSwitchCase="'hts'"
+                  [patient]="patient"
+                >
+                </hts-snapshot>
               </div>
             </div>
             <div class="clear clear-fix">&nbsp;</div>

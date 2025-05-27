@@ -166,7 +166,6 @@ export class EnrollmentShortcutComponent implements OnInit {
         return !genderIncompatiblePrograms.includes(program.uuid);
       });
     }
-
     return enrollablePrograms;
   }
 
