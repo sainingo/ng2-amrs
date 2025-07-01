@@ -1,7 +1,9 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Patient } from '../../../models/patient.model';
-import { PatientService } from '../../services/patient.service';
+import { HTSModuleResourceService } from 'src/app/etl-api/hts-module-resource.service';
+import { PatientService } from '../../services/patient.service'; // Import PatientService
+import * as _ from 'lodash';
 
 @Component({
   selector: 'hts-summary-latest',
@@ -12,15 +14,18 @@ export class HtsSummaryLatestComponent implements OnInit, OnDestroy {
   public loadingSummary = false;
   public subscription: Subscription;
   public patient: Patient;
-  public patientUuid: any;
+  public patientUuid: string;
   public errors: any = [];
   public summaryData: any;
-  @Input() public programUuid: string;
+  public programUuid: string;
 
-  constructor(private patientService: PatientService) {}
+  constructor(
+    private htsModuleService: HTSModuleResourceService,
+    private patientService: PatientService // Inject PatientService
+  ) {}
 
-  ngOnInit() {
-    this.getPatient();
+  public ngOnInit(): void {
+    this.loadPatientData();
   }
 
   ngOnDestroy() {
@@ -29,40 +34,62 @@ export class HtsSummaryLatestComponent implements OnInit, OnDestroy {
     }
   }
 
-  getPatient() {
+  private loadPatientData(): void {
     this.loadingSummary = true;
     this.subscription = this.patientService.currentlyLoadedPatient.subscribe(
       (patient) => {
         if (patient) {
           this.patient = patient;
-          this.patientUuid = this.patient.person.uuid;
-          this.loadHtsSummary(); // Use mock now, real API later
+          this.patientUuid = patient.uuid;
+          this.loadHTSSummary();
+        } else {
+          this.loadingSummary = false;
         }
       },
       (err) => {
-        console.error(err);
-        this.loadingSummary = false;
         this.errors.push({
-          id: 'patient',
-          message: 'Error fetching patient'
+          id: 'Patient',
+          message: 'Error fetching patient data',
+          error: err
         });
+        this.loadingSummary = false;
       }
     );
   }
 
-  loadHtsSummary() {
-    // Simulated data — replace with API call later
-    setTimeout(() => {
-      this.summaryData = {
-        last_test_result: 'Negative',
-        date_tested: '2025-05-20',
-        testing_strategy: 'PITC',
-        client_type: 'New Client',
-        entry_point: 'OPD',
-        consent: true,
-        provider: 'Dr. Jane Doe'
-      };
+  public loadHTSSummary(): void {
+    if (!this.patientUuid) {
+      this.errors.push({
+        id: 'summary',
+        message: 'Patient UUID not available'
+      });
       this.loadingSummary = false;
-    }, 1000);
+      return;
+    }
+
+    this.loadingSummary = true;
+    this.htsModuleService.getHTSSummary(this.patientUuid).subscribe(
+      (summary) => {
+        this.loadingSummary = false;
+
+        if (summary.result) {
+          this.summaryData = summary.result[1][0];
+        }
+        if (!this.summaryData) {
+          this.errors.push({
+            id: 'summary',
+            message: 'No HTS summary data available'
+          });
+        }
+      },
+      (error) => {
+        this.loadingSummary = false;
+        this.errors.push({
+          id: 'summary',
+          message: 'Error fetching HTS summary data'
+        });
+        console.error('Error fetching HTS summary:', error);
+      }
+    );
   }
 }

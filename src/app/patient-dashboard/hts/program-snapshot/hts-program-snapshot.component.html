@@ -1,22 +1,22 @@
 <div class="snapshot">
   <div *ngIf="hasError">
     <p class="alert alert-error text-error">
-      Error generating Oncology program snapshot
+      Error generating HTS program snapshot
     </p>
   </div>
   <div *ngIf="!hasData && !hasError && hasLoadedData">
     <p class="alert alert-warning">
-      No patient data to generate Oncology program snapshot
+      No patient data to generate HTS program snapshot
     </p>
   </div>
-  <div *ngIf="!hasError && !hasData && !isIntegratedProgram">
+  <div *ngIf="hasData && !hasError">
     <div class="snapshot-summary">
       <h4 class="component-title">Last Encounter</h4>
       <div class="col-md-12">
         <div class="full-width" *ngIf="!latestEncounterLocation">
           <p>
             Location:
-            <span>{{ location }}</span>
+            <span>{{ latestHTSEncounterDetails?.location_name || '--' }}</span>
           </p>
         </div>
       </div>
@@ -25,12 +25,16 @@
         <div>
           <div class="col-md-12">
             <div class="col-md-6 col-xs-12">
-              <p>Date: 12/06/2025</p>
+              <p>
+                Date: {{ latestHTSEncounterDetails?.encounter_date || '--' }}
+              </p>
             </div>
             <div class="col-md-6 col-xs-12">
               <p>
                 Test Results:
-                <span>Negative</span>
+                <span>{{
+                  latestHTSEncounterDetails?.hiv_test_1_results || '--'
+                }}</span>
               </p>
             </div>
           </div>
@@ -38,23 +42,31 @@
             <div class="col-md-6 col-xs-12">
               <p>
                 Date of Last Hiv Test:
-                <span>02/05/2025</span>
+                <span>
+                  {{
+                    (latestHTSEncounterDetails?.date_of_last_hiv_test
+                      | date: 'dd/MM/yyyy') || '--'
+                  }}</span
+                >
               </p>
             </div>
             <div class="col-md-6 col-xs-12">
               <p>Type of HIV Test: Rapid antibody</p>
             </div>
             <div class="col-md-6 col-xs-12">
-              <p>Result Confirmation Done: +VE</p>
+              <p>
+                Result Confirmation Done:
+                {{ latestHTSEncounterDetails?.final_results || '--' }}
+              </p>
             </div>
           </div>
         </div>
-        
+
         <div class="clear"></div>
       </div>
     </div>
   </div>
-  <!-- <div *ngIf="!hasLoadedData && !hasError">
+  <div *ngIf="!hasLoadedData && !hasError">
     <p>Loading patient data here....</p>
-  </div> -->
+  </div>
 </div>
