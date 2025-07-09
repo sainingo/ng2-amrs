@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'hts-summary-latest',
   templateUrl: './hts-summary-latest.component.html',
-  styles: []
+  styleUrls: ['./hts-summary-latest.component.css']
 })
 export class HtsSummaryLatestComponent implements OnInit, OnDestroy {
   public loadingSummary = false;

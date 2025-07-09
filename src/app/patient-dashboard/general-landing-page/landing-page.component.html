@@ -33,7 +33,10 @@
         </div>
         <div
           class="program-body"
-          [ngStyle]="{ 'background-color': addBackground }"
+          [ngStyle]="{
+            'background-color':
+              row.baseRoute === 'hts' ? '#f9f7e8' : addBackground
+          }"
         >
           <div *ngIf="row.isEnrolled" class="program-info">
             <div class="program-snapshot">

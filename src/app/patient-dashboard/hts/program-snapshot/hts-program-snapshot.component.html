@@ -26,11 +26,6 @@
           <div class="col-md-12">
             <div class="col-md-6 col-xs-12">
               <p>
-                Date: {{ latestHTSEncounterDetails?.encounter_date || '--' }}
-              </p>
-            </div>
-            <div class="col-md-6 col-xs-12">
-              <p>
                 Test Results:
                 <span>{{
                   latestHTSEncounterDetails?.hiv_test_1_results || '--'
@@ -41,7 +36,18 @@
           <div class="col-md-12">
             <div class="col-md-6 col-xs-12">
               <p>
-                Date of Last Hiv Test:
+                Date of Last HIV Test:
+                <span>
+                  {{
+                    (latestHTSEncounterDetails?.date_of_last_hiv_test
+                      | date: 'dd/MM/yyyy') || '--'
+                  }}</span
+                >
+              </p>
+            </div>
+            <div class="col-md-6 col-xs-12">
+              <p>
+                Date of Initial HIV Test:
                 <span>
                   {{
                     (latestHTSEncounterDetails?.date_of_last_hiv_test
@@ -53,13 +59,13 @@
             <div class="col-md-6 col-xs-12">
               <p>Type of HIV Test: Rapid antibody</p>
             </div>
-            <div class="col-md-6 col-xs-12">
+          </div>
+          <div class="col-md-6 col-xs-12">
               <p>
-                Result Confirmation Done:
+                Result Confirmation Done (For Positive Results):
                 {{ latestHTSEncounterDetails?.final_results || '--' }}
               </p>
             </div>
-          </div>
         </div>
 
         <div class="clear"></div>
