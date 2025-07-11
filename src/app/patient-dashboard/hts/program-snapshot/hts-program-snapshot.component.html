@@ -26,7 +26,7 @@
           <div class="col-md-12">
             <div class="col-md-6 col-xs-12">
               <p>
-                Test Results:
+                HIV Test Result:
                 <span>{{
                   latestHTSEncounterDetails?.hiv_test_1_results || '--'
                 }}</span>
@@ -50,14 +50,14 @@
                 Date of Initial HIV Test:
                 <span>
                   {{
-                    (latestHTSEncounterDetails?.date_of_last_hiv_test
+                    (latestHTSEncounterDetails?.date_of_initial_hiv_test
                       | date: 'dd/MM/yyyy') || '--'
                   }}</span
                 >
               </p>
             </div>
             <div class="col-md-6 col-xs-12">
-              <p>Type of HIV Test: Rapid antibody</p>
+              <p>Type of HIV Test: {{ latestHTSEncounterDetails?.rapid_antibody_result || '--' }}</p>
             </div>
           </div>
           <div class="col-md-6 col-xs-12">
