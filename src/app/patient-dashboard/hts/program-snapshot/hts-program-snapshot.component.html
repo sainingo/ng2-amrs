@@ -57,15 +57,21 @@
               </p>
             </div>
             <div class="col-md-6 col-xs-12">
-              <p>Type of HIV Test: {{ latestHTSEncounterDetails?.rapid_antibody_result || '--' }}</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-xs-12">
               <p>
-                Result Confirmation Done (For Positive Results):
-                {{ latestHTSEncounterDetails?.final_results || '--' }}
+                Type of HIV Test:
+                {{ latestHTSEncounterDetails?.rapid_antibody_result || '--' }}
               </p>
             </div>
+          </div>
+          <div
+            class="col-md-6 col-xs-12"
+            *ngIf="latestHTSEncounterDetails?.hiv_test_1_results === 'POSITIVE'"
+          >
+            <p>
+              Retest Results:
+              {{ latestHTSEncounterDetails?.final_results || '--' }}
+            </p>
+          </div>
         </div>
 
         <div class="clear"></div>
