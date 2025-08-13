@@ -68,6 +68,9 @@ export class VisitComponent implements OnInit, OnDestroy {
   };
   public patientEnrolledInGroup = false;
   public communityEnrollmentSuccessMessage;
+  public showHTSBlockingMessage = false;
+  public htsBlockingMessage = '';
+  private readonly HTS_PROGRAM_UUID = 'a0f8382f-df8a-4f1d-8959-9fb6eef90353';
 
   constructor(
     private todayVisitService: TodayVisitService,
@@ -79,6 +82,7 @@ export class VisitComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.getPatientUuid();
+    this.checkHTSBlocking();
     // this.isBusy = true;
     // app feature analytics
     // this.appFeatureAnalytics
@@ -108,6 +112,41 @@ export class VisitComponent implements OnInit, OnDestroy {
     );
 
     this.subs.push(sub);
+  }
+
+  public checkHTSBlocking() {
+    if (this.isDefaultDepartmentHIV() && this.isHTSProgram()) {
+      this.showHTSBlockingMessage = true;
+      this.htsBlockingMessage =
+        'You cannot start HTS visits under HIV department. Please switch to the appropriate department or contact IT support.';
+    }
+  }
+
+  public isDefaultDepartmentHIV(): boolean {
+    try {
+      const storedDepartment = localStorage.getItem('userDefaultDepartment');
+      if (storedDepartment) {
+        const departments = JSON.parse(storedDepartment);
+        return departments.some(
+          (dept) => dept.itemName && dept.itemName.toUpperCase() === 'HIV'
+        );
+      }
+    } catch (error) {
+      console.error('Error checking department:', error);
+    }
+    return false;
+  }
+
+  public isHTSProgram(): boolean {
+    return this.programUuid === this.HTS_PROGRAM_UUID;
+  }
+
+  public canStartVisit(): boolean {
+    return !(this.isDefaultDepartmentHIV() && this.isHTSProgram());
+  }
+
+  public dismissHTSBlockingMessage() {
+    this.showHTSBlockingMessage = false;
   }
 
   public checkIfPatientEnrolledInGroup() {

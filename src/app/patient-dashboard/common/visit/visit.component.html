@@ -36,6 +36,25 @@
     patient</strong
   >
 </div>
+
+<!-- HTS Blocking Warning Message -->
+<div
+  *ngIf="showHTSBlockingMessage"
+  class="alert alert-warning alert-dismissible"
+  style="margin-bottom: 15px"
+>
+  <button
+    type="button"
+    class="close"
+    (click)="dismissHTSBlockingMessage()"
+    aria-label="Close"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <i class="fa fa-exclamation-triangle"></i>
+  <strong>Warning!</strong> {{ htsBlockingMessage }}
+</div>
+
 <div>
   <div
     *ngFor="let error of errors"
@@ -103,18 +122,37 @@
       margin-top: 10px;
     "
   >
-    <h4>
-      <!-- <span class="fa  fa-info"></span>  -->
-      Select location, then select visit type to start:
-    </h4>
-    <div class="box-body forms-list">
-      <app-visit-starter
-        [patientUuid]="patient.uuid"
-        [programEnrollmentUuid]="currentProgramEnrollmentUuid"
-        [programUuid]="programUuid"
-        (visitStarted)="onVisitStartedOrChanged($event)"
-        [patientEnrolledInGroup]="patientEnrolledInGroup"
-      ></app-visit-starter>
+    <div
+      *ngIf="!canStartVisit()"
+      class="alert alert-danger"
+      style="margin-bottom: 10px"
+    >
+      <i class="fa fa-ban"></i>
+      <strong>Visit Blocked:</strong> You cannot start HTS visits under HIV
+      department. Please switch to the appropriate department or contact IT
+      support.
+    </div>
+
+    <div *ngIf="canStartVisit()">
+      <h4>
+        <!-- <span class="fa  fa-info"></span>  -->
+        Select location, then select visit type to start:
+      </h4>
+      <div class="box-body forms-list">
+        <app-visit-starter
+          [patientUuid]="patient.uuid"
+          [programEnrollmentUuid]="currentProgramEnrollmentUuid"
+          [programUuid]="programUuid"
+          (visitStarted)="onVisitStartedOrChanged($event)"
+          [patientEnrolledInGroup]="patientEnrolledInGroup"
+        ></app-visit-starter>
+      </div>
+    </div>
+
+    <div *ngIf="!canStartVisit()">
+      <h4 style="color: #999">
+        Visit starter is disabled due to department restrictions.
+      </h4>
     </div>
   </div>
 </div>
