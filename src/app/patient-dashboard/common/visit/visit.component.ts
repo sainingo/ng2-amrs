@@ -118,7 +118,7 @@ export class VisitComponent implements OnInit, OnDestroy {
     if (this.isDefaultDepartmentHIV() && this.isHTSProgram()) {
       this.showHTSBlockingMessage = true;
       this.htsBlockingMessage =
-        'You cannot start HTS visits under HIV department. Please switch to the appropriate department or contact IT support.';
+        'HTS visit cannot be started,  client is HIV positive and enrolled in the HIV program. Please contact IT for assistance.';
     }
   }
 

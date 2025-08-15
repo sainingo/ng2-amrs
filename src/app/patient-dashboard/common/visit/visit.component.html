@@ -122,17 +122,6 @@
       margin-top: 10px;
     "
   >
-    <div
-      *ngIf="!canStartVisit()"
-      class="alert alert-danger"
-      style="margin-bottom: 10px"
-    >
-      <i class="fa fa-ban"></i>
-      <strong>Visit Blocked:</strong> You cannot start HTS visits under HIV
-      department. Please switch to the appropriate department or contact IT
-      support.
-    </div>
-
     <div *ngIf="canStartVisit()">
       <h4>
         <!-- <span class="fa  fa-info"></span>  -->
